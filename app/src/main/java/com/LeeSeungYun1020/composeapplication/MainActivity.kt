@@ -4,6 +4,8 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -58,7 +60,11 @@ private fun Greeting(name: String) {
     var expanded by remember {
         mutableStateOf(false)
     }
-    val extraPadding = if (expanded) 48.dp else 0.dp
+    val extraPadding by animateDpAsState(
+        targetValue = if (expanded) 48.dp else 0.dp, animationSpec = tween(
+            durationMillis = 1000
+        )
+    )
     Surface(
         color = MaterialTheme.colors.primary,
         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
