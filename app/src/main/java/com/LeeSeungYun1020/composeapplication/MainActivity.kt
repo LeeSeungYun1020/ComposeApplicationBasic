@@ -30,11 +30,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ComposeApplicationTheme {
-                Surface(color = MaterialTheme.colors.background) {
-                    Greeting(name = "Android")
-                }
+                MyApp()
             }
         }
+    }
+}
+
+@Composable
+fun MyApp() {
+    Surface(color = MaterialTheme.colors.background) {
+        Greeting(name = "Android")
     }
 }
 
@@ -52,6 +57,6 @@ private fun Greeting(name: String) {
 @Composable
 fun DefaultPreview() {
     ComposeApplicationTheme {
-        Greeting("Android")
+        MyApp()
     }
 }
