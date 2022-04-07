@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ComposeApplication</string>
+    <string name="expand_less">Expand Less</string>
+    <string name="expand_more">Expand More</string>
 </resources>

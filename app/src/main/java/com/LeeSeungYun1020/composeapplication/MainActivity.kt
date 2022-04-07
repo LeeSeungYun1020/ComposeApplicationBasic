@@ -4,16 +4,21 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,7 +30,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ComposeApplicationTheme {
-                Greetings()
+                MyApp()
             }
         }
     }
@@ -47,7 +52,11 @@ fun Greetings(names: List<String> = List(1000) { "from $it" }) {
         Column(modifier = Modifier.padding(vertical = 4.dp)) {
             LazyColumn {
                 item {
-                    Text(text = "This is Greetings")
+                    Text(
+                        text = "This is Greetings",
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                        style = MaterialTheme.typography.h4
+                    )
                 }
                 items(items = names) { name ->
                     Greeting(name = name)
@@ -58,38 +67,54 @@ fun Greetings(names: List<String> = List(1000) { "from $it" }) {
 }
 
 @Composable
-private fun Greeting(name: String) {
+fun CardContents(name: String) {
     var expanded by remember {
         mutableStateOf(false)
     }
-    val extraPadding by animateDpAsState(
-        targetValue = if (expanded) 48.dp else 0.dp, animationSpec = tween(
-            durationMillis = 1000
-        )
-    )
-    Surface(
-        color = MaterialTheme.colors.primary,
-        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+    Row(
+        modifier = Modifier
+            .padding(24.dp)
+            .animateContentSize(
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow
+                )
+            )
     ) {
-        Row(
-            modifier = Modifier.padding(24.dp)
+        Column(
+            modifier = Modifier.weight(1f)
         ) {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(bottom = extraPadding)
-            ) {
-                Text(text = "Hello,")
+            Text(text = "Hello,")
+            Text(
+                text = name, style = MaterialTheme.typography.h4.copy(
+                    fontWeight = FontWeight.ExtraBold, fontFamily = FontFamily.Serif
+                )
+            )
+            if (expanded) {
                 Text(
-                    text = name, style = MaterialTheme.typography.h4.copy(
-                        fontWeight = FontWeight.ExtraBold, fontFamily = FontFamily.Serif
+                    text = ("Composem ipsum color sit lazy, " + "padding theme elit, sed do bouncy. ").repeat(
+                        4
                     )
                 )
             }
-            OutlinedButton(onClick = { expanded = !expanded }) {
-                Text(text = if (expanded) "Show less" else "Show more")
-            }
         }
+        IconButton(onClick = { expanded = !expanded }) {
+            Icon(
+                imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+                contentDescription = if (expanded) stringResource(R.string.expand_less) else stringResource(
+                    R.string.expand_more
+                )
+            )
+        }
+    }
+}
+
+@Composable
+private fun Greeting(name: String) {
+    Card(
+        backgroundColor = MaterialTheme.colors.primary,
+        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+    ) {
+        CardContents(name)
     }
 }
 
