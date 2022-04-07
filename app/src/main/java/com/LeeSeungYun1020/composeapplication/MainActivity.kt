@@ -30,91 +30,28 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ComposeApplicationTheme {
-                Conversation(messages = SampleData.conversationSample)
+                Surface(color = MaterialTheme.colors.background) {
+                    Greeting(name = "Android")
+                }
             }
         }
     }
 }
 
-data class Message(val author: String, val body: String)
-
 @Composable
-fun MessageCard(msg: Message) {
-    Row(modifier = Modifier.padding(8.dp)) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_launcher_background),
-            contentDescription = "profile",
-            modifier = Modifier
-                .size(40.dp)
-                .clip(CircleShape)
-                .border(1.5.dp, MaterialTheme.colors.secondaryVariant, CircleShape)
+private fun Greeting(name: String) {
+    Surface(color = MaterialTheme.colors.primary) {
+        Text(
+            text = "Hello $name!",
+            modifier = Modifier.padding(24.dp)
         )
-
-        Spacer(modifier = Modifier.width(8.dp))
-
-        var isExpanded by remember {
-            mutableStateOf(false)
-        }
-        val surfaceColor: Color by animateColorAsState(
-            targetValue =
-            if (isExpanded) MaterialTheme.colors.primary else MaterialTheme.colors.surface
-        )
-        Column(modifier = Modifier.clickable {
-            isExpanded = !isExpanded
-        }) {
-            Text(
-                text = msg.author,
-                color = MaterialTheme.colors.secondaryVariant,
-                style = MaterialTheme.typography.subtitle2
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Surface(
-                shape = MaterialTheme.shapes.medium,
-                elevation = 1.dp,
-                color = surfaceColor,
-                modifier = Modifier.animateContentSize().padding(1.dp)
-            ) {
-                Text(
-                    text = msg.body,
-                    modifier = Modifier.padding(all = 4.dp),
-                    maxLines = if (isExpanded) Int.MAX_VALUE else 1,
-                    style = MaterialTheme.typography.body2
-                )
-            }
-        }
     }
 }
 
-@Preview(
-    name = "Light Mode"
-)
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    showBackground = true,
-    name = "Dark Mode"
-)
+@Preview(showBackground = true)
 @Composable
-fun PreviewMessageCard() {
+fun DefaultPreview() {
     ComposeApplicationTheme {
-        MessageCard(msg = Message("Colleague", "Hey, take a look at this"))
-    }
-}
-
-@Composable
-fun Conversation(messages: List<Message>) {
-    LazyColumn {
-        items(messages) { message ->
-            MessageCard(msg = message)
-        }
-    }
-}
-
-@Preview
-@Composable
-fun PreviewConversation() {
-    ComposeApplicationTheme {
-        Conversation(messages = SampleData.conversationSample)
+        Greeting("Android")
     }
 }
