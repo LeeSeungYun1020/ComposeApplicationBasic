@@ -14,6 +14,8 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.LeeSeungYun1020.composeapplication.ui.theme.ComposeApplicationTheme
@@ -78,7 +80,11 @@ private fun Greeting(name: String) {
                     .padding(bottom = extraPadding)
             ) {
                 Text(text = "Hello,")
-                Text(text = name)
+                Text(
+                    text = name, style = MaterialTheme.typography.h4.copy(
+                        fontWeight = FontWeight.ExtraBold, fontFamily = FontFamily.Serif
+                    )
+                )
             }
             OutlinedButton(onClick = { expanded = !expanded }) {
                 Text(text = if (expanded) "Show less" else "Show more")
@@ -114,6 +120,7 @@ fun OnboardingPreview() {
     }
 }
 
+@Preview(showBackground = true, widthDp = 320, uiMode = UI_MODE_NIGHT_YES)
 @Preview(showBackground = true, widthDp = 320)
 @Composable
 fun DefaultPreview() {
