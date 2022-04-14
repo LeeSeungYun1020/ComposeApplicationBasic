@@ -10,9 +10,9 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +31,43 @@ class MainActivity : ComponentActivity() {
 
             }
         }
+    }
+}
+
+val topics = listOf(
+    "Arts & Crafts",
+    "Beauty",
+    "Books",
+    "Business",
+    "Comics",
+    "Culinary",
+    "Design",
+    "Fashion",
+    "Film",
+    "History",
+    "Maths",
+    "Music",
+    "People",
+    "Philosophy",
+    "Religion",
+    "Social sciences",
+    "Technology",
+    "TV",
+    "Writing"
+)
+
+@Composable
+fun LayoutsCodelab() {
+    Scaffold(topBar = {
+        TopAppBar(title = {
+            Text("LayoutsCodelab")
+        }, actions = {
+            IconButton(onClick = {}) {
+                Icon(Icons.Filled.ThumbUp, contentDescription = "Best")
+            }
+        })
+    }) { innerPadding ->
+        BodyContent(modifier = Modifier.padding(innerPadding), topics = topics)
     }
 }
 
@@ -103,7 +140,13 @@ fun Chip(modifier: Modifier = Modifier, text: String) {
 
 @Composable
 fun BodyContent(modifier: Modifier = Modifier, topics: List<String>) {
-    Row(Modifier.horizontalScroll(rememberScrollState())) {
+    Row(
+        Modifier
+            .background(Color.LightGray)
+            .padding(16.dp)
+            .size(200.dp)
+            .horizontalScroll(rememberScrollState())
+    ) {
         StaggeredGrid(modifier = modifier) {
             for (topic in topics) {
                 Chip(modifier = Modifier.padding(8.dp), text = topic)
@@ -116,28 +159,7 @@ fun BodyContent(modifier: Modifier = Modifier, topics: List<String>) {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    val topics = listOf(
-        "Arts & Crafts",
-        "Beauty",
-        "Books",
-        "Business",
-        "Comics",
-        "Culinary",
-        "Design",
-        "Fashion",
-        "Film",
-        "History",
-        "Maths",
-        "Music",
-        "People",
-        "Philosophy",
-        "Religion",
-        "Social sciences",
-        "Technology",
-        "TV",
-        "Writing"
-    )
     ComposeApplicationTheme {
-        BodyContent(topics = topics)
+        LayoutsCodelab()
     }
 }
