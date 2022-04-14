@@ -18,7 +18,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.AlignmentLine
+import androidx.compose.ui.layout.FirstBaseline
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.LeeSeungYun1020.composeapplication.ui.theme.ComposeApplicationTheme
@@ -56,14 +61,6 @@ fun MyApp() {
 }
 
 @Composable
-fun BodyContent(modifier: Modifier = Modifier) {
-    Column(modifier) {
-        Text(text = "Hi there!")
-        Text(text = "Thanks for going through the Layouts codelab")
-    }
-}
-
-@Composable
 fun SimpleList() {
     val scrollState = rememberScrollState()
     Column(
@@ -76,7 +73,7 @@ fun SimpleList() {
 }
 
 @Composable
-fun lazyList() {
+fun LazyList() {
     val scrollState = rememberLazyListState()
     LazyColumn(state = scrollState) {
         items(100) {
@@ -119,13 +116,15 @@ fun ImageList() {
                 Text(text = "Scroll to the top")
             }
 
-            Button(onClick = {
-                coroutineScope.launch {
-                    scrollState.animateScrollToItem(listSize - 1)
-                }
-            }, modifier = Modifier
-                .weight(1f)
-                .padding(4.dp)) {
+            Button(
+                onClick = {
+                    coroutineScope.launch {
+                        scrollState.animateScrollToItem(listSize - 1)
+                    }
+                }, modifier = Modifier
+                    .weight(1f)
+                    .padding(4.dp)
+            ) {
                 Text(text = "Scroll to the end")
             }
         }
@@ -135,8 +134,51 @@ fun ImageList() {
             }
         }
     }
+}
 
+fun Modifier.firstBaselineToTop(
+    firstBaselineToTop: Dp
+) = this.then(layout { measurable, constraints ->
+    val placeable = measurable.measure(constraints)
+    check(placeable[FirstBaseline] != AlignmentLine.Unspecified)
+    val firstBaseline = placeable[FirstBaseline]
 
+    val placeableY = firstBaselineToTop.roundToPx() - firstBaseline
+    val height = placeable.height + placeableY
+
+    layout(placeable.width, height) {
+        placeable.placeRelative(0, placeableY)
+    }
+})
+
+@Composable
+fun MyOwnColumn(
+    modifier: Modifier = Modifier, content: @Composable () -> Unit
+) {
+    Layout(
+        modifier = modifier, content = content
+    ) { measurables, constraints ->
+        val placeables = measurables.map { measurable ->
+            measurable.measure(constraints)
+        }
+        var yPosition = 0
+        layout(constraints.maxWidth, constraints.maxHeight) {
+            placeables.forEach { placeable ->
+                placeable.placeRelative(x = 0, y = yPosition)
+                yPosition += placeable.height
+            }
+        }
+    }
+}
+
+@Composable
+fun BodyContent(modifier: Modifier = Modifier) {
+    MyOwnColumn(modifier.padding(8.dp)) {
+        Text("MyOwnColumn")
+        Text("places items")
+        Text("vertically.")
+        Text("We've done it by hand!")
+    }
 }
 
 @Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
@@ -144,6 +186,6 @@ fun ImageList() {
 @Composable
 fun DefaultPreview() {
     ComposeApplicationTheme {
-        ImageList()
+        BodyContent()
     }
 }
