@@ -4,15 +4,12 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.LeeSeungYun1020.composeapplication.ui.theme.ComposeApplicationTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,35 +17,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ComposeApplicationTheme {
-
+                Surface(
+                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background
+                ) {
+                    WellnessScreen()
+                }
             }
         }
-    }
-}
-
-@Composable
-fun TwoTexts(modifier: Modifier = Modifier, text1: String, text2: String) {
-    Row(modifier = modifier.height(IntrinsicSize.Min)) {
-        Text(
-            text = text1,
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 4.dp)
-                .wrapContentWidth(Alignment.Start)
-        )
-        Divider(
-            color = Color.Black, modifier = Modifier
-                .fillMaxHeight()
-                .width(1.dp)
-        )
-        // IntrinsicSize.Min으로 지정하였기 때문에 높이가 전체 화면을 차지하는 대신 텍스트와 맞춰짐
-        Text(
-            text = text2,
-            modifier = Modifier
-                .weight(1f)
-                .padding(end = 4.dp)
-                .wrapContentWidth(Alignment.End)
-        )
     }
 }
 
@@ -57,8 +32,10 @@ fun TwoTexts(modifier: Modifier = Modifier, text1: String, text2: String) {
 @Composable
 fun DefaultPreview() {
     ComposeApplicationTheme {
-        androidx.compose.material.Surface {
-            TwoTexts(text1 = "Hi", text2 = "there")
+        Surface(
+            modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background
+        ) {
+            WellnessScreen()
         }
     }
 }
