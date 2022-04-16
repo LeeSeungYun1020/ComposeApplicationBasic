@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Android Open Source Project
+ * Copyright 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package com.codelab.theming.ui.finish.theme
+package com.LeeSeungYun1020.composeapplication.ui
 
-import androidx.compose.foundation.shape.CutCornerShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Shapes
-import androidx.compose.ui.unit.dp
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.lightColors
+import androidx.compose.runtime.Composable
 
-val JetnewsShapes = Shapes(
-    small = CutCornerShape(topStart = 8.dp),
-    medium = CutCornerShape(topStart = 24.dp),
-    large = RoundedCornerShape(8.dp)
-)
+@Composable
+fun AnimationCodelabTheme(content: @Composable () -> Unit) {
+    val colors = lightColors(
+        primary = Purple500, primaryVariant = Purple700, secondary = Teal200
+    )
+    MaterialTheme(
+        colors = colors, content = content
+    )
+}

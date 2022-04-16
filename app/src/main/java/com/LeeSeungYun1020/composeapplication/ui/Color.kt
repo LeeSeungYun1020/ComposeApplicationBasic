@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Android Open Source Project
+ * Copyright 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package com.codelab.theming.ui.finish.theme
+package com.LeeSeungYun1020.composeapplication.ui
 
 import androidx.compose.ui.graphics.Color
 
-val Red200 = Color(0xfff297a2)
-val Red300 = Color(0xffea6d7e)
-val Red700 = Color(0xffdd0d3c)
-val Red800 = Color(0xffd00036)
-val Red900 = Color(0xffc20029)
+val Purple100 = Color(0xFFE1BEE7)
+val Purple500 = Color(0xFF6200EE)
+val Purple700 = Color(0xFF3700B3)
+val Teal200 = Color(0xFF03DAC5)
+val Green300 = Color(0xFF81C784)
+val Green800 = Color(0xFF2E7D32)
+val Amber600 = Color(0xFFFFB300)
