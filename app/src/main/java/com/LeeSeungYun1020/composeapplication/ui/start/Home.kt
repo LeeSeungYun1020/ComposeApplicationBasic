@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -175,7 +176,9 @@ fun PostItem(
         .clickable { /* todo */ }
         .padding(vertical = 8.dp), icon = {
         Image(
-            painter = painterResource(post.imageThumbId), contentDescription = null
+            painter = painterResource(post.imageThumbId),
+            contentDescription = null,
+            modifier = Modifier.clip(shape = MaterialTheme.shapes.small)
         )
     }, text = {
         Text(text = post.title)
