@@ -40,13 +40,14 @@ import androidx.compose.ui.unit.dp
 import com.LeeSeungYun1020.composeapplication.R
 import com.LeeSeungYun1020.composeapplication.data.Post
 import com.LeeSeungYun1020.composeapplication.data.PostRepo
+import com.LeeSeungYun1020.composeapplication.ui.start.theme.JetnewsTheme
 import java.util.*
 
 @Composable
 fun Home() {
     val featured = remember { PostRepo.getFeaturedPost() }
     val posts = remember { PostRepo.getPosts() }
-    MaterialTheme {
+    JetnewsTheme {
         Scaffold(topBar = { AppBar() }) { innerPadding ->
             LazyColumn(contentPadding = innerPadding) {
                 item {
@@ -180,7 +181,18 @@ private fun PostItemPreview() {
 @Composable
 private fun FeaturedPostPreview() {
     val post = remember { PostRepo.getFeaturedPost() }
-    FeaturedPost(post = post)
+    JetnewsTheme {
+        FeaturedPost(post = post)
+    }
+}
+
+@Preview("Featured Post - Dark")
+@Composable
+private fun FeaturedPostDarkPreview() {
+    val post = remember { PostRepo.getFeaturedPost() }
+    JetnewsTheme(darkTheme = true) {
+        FeaturedPost(post = post)
+    }
 }
 
 @Preview("Home")
