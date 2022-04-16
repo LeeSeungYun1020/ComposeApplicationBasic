@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background
                 ) {
-                    WellnessScreen()
+
                 }
             }
         }
@@ -35,7 +35,7 @@ fun DefaultPreview() {
         Surface(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background
         ) {
-            WellnessScreen()
+
         }
     }
 }
