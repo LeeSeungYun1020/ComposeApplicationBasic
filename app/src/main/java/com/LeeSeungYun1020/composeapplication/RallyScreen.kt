@@ -20,32 +20,29 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.MoneyOff
 import androidx.compose.material.icons.filled.PieChart
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.LeeSeungYun1020.composeapplication.data.UserData
+import com.LeeSeungYun1020.composeapplication.ui.accounts.AccountsBody
+import com.LeeSeungYun1020.composeapplication.ui.bills.BillsBody
+import com.LeeSeungYun1020.composeapplication.ui.overview.OverviewBody
 
 /**
- * Screen metadata for Rally.
+ * Screen state for Rally. Navigation is kept simple until a proper mechanism is available. Back
+ * navigation is not supported.
  */
-
 enum class RallyScreen(
-    val icon: ImageVector
+    val icon: ImageVector, private val body: @Composable ((RallyScreen) -> Unit) -> Unit
 ) {
     Overview(
         icon = Icons.Filled.PieChart,
-    ),
-    Accounts(
-        icon = Icons.Filled.AttachMoney,
-    ),
-    Bills(
+        body = { onScreenChange -> OverviewBody(onScreenChange) }),
+    Accounts(icon = Icons.Filled.AttachMoney, body = { AccountsBody(UserData.accounts) }), Bills(
         icon = Icons.Filled.MoneyOff,
-    );
+        body = { BillsBody(UserData.bills) });
 
-    companion object {
-        fun fromRoute(route: String?): RallyScreen = when (route?.substringBefore("/")) {
-            Accounts.name -> Accounts
-            Bills.name -> Bills
-            Overview.name -> Overview
-            null -> Overview
-            else -> throw IllegalArgumentException("Route $route is not recognized.")
-        }
+    @Composable
+    fun Content(onScreenChange: (RallyScreen) -> Unit) {
+        body(onScreenChange)
     }
 }

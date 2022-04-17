@@ -17,10 +17,7 @@
 package com.LeeSeungYun1020.composeapplication.ui.bills
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.contentDescription
 import com.LeeSeungYun1020.composeapplication.R
 import com.LeeSeungYun1020.composeapplication.data.Bill
 import com.LeeSeungYun1020.composeapplication.ui.components.BillRow
@@ -31,8 +28,7 @@ import com.LeeSeungYun1020.composeapplication.ui.components.StatementBody
  */
 @Composable
 fun BillsBody(bills: List<Bill>) {
-    StatementBody(modifier = Modifier.clearAndSetSemantics { contentDescription = "Bills" },
-        items = bills,
+    StatementBody(items = bills,
         amounts = { bill -> bill.amount },
         colors = { bill -> bill.color },
         amountsTotal = bills.map { bill -> bill.amount }.sum(),

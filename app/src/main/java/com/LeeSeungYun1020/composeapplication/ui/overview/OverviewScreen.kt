@@ -16,8 +16,9 @@
 
 package com.LeeSeungYun1020.composeapplication.ui.overview
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -30,29 +31,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.LeeSeungYun1020.composeapplication.R
+import com.LeeSeungYun1020.composeapplication.RallyScreen
 import com.LeeSeungYun1020.composeapplication.data.UserData
 import com.LeeSeungYun1020.composeapplication.ui.components.*
+import com.LeeSeungYun1020.composeapplication.ui.theme.RallyTheme
 import java.util.*
 
 @Composable
-fun OverviewBody(
-    onClickSeeAllAccounts: () -> Unit = {},
-    onClickSeeAllBills: () -> Unit = {},
-    onAccountClick: (String) -> Unit = {},
-) {
-    Column(modifier = Modifier
-        .padding(16.dp)
-        .verticalScroll(rememberScrollState())
-        .semantics { contentDescription = "Overview Screen" }) {
+fun OverviewBody(onScreenChange: (RallyScreen) -> Unit = {}) {
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
         AlertCard()
         Spacer(Modifier.height(RallyDefaultPadding))
-        AccountsCard(onClickSeeAllAccounts, onAccountClick = onAccountClick)
+        AccountsCard(onScreenChange)
         Spacer(Modifier.height(RallyDefaultPadding))
-        BillsCard(onClickSeeAllBills)
+        BillsCard(onScreenChange)
     }
 }
 
@@ -71,7 +71,22 @@ private fun AlertCard() {
             }, bodyText = alertMessage, buttonText = "Dismiss".uppercase(Locale.getDefault())
         )
     }
-    Card {
+
+    var currentTargetElevation by remember { mutableStateOf(1.dp) }
+    LaunchedEffect(Unit) {
+        // Start the animation
+        currentTargetElevation = 8.dp
+    }
+    val animatedElevation = animateDpAsState(targetValue = currentTargetElevation,
+        animationSpec = tween(durationMillis = 500),
+        finishedListener = {
+            currentTargetElevation = if (currentTargetElevation > 4.dp) {
+                1.dp
+            } else {
+                8.dp
+            }
+        })
+    Card(elevation = animatedElevation.value) {
         Column {
             AlertHeader {
                 showDialog = true
@@ -81,6 +96,14 @@ private fun AlertCard() {
             )
             AlertItem(alertMessage)
         }
+    }
+}
+
+@Preview
+@Composable
+fun AlertCardPreview() {
+    RallyTheme {
+        OverviewBody()
     }
 }
 
@@ -157,12 +180,7 @@ private fun <T> OverviewScreenCard(
             OverViewDivider(data, values, colors)
             Column(Modifier.padding(start = 16.dp, top = 4.dp, end = 8.dp)) {
                 data.take(SHOWN_ITEMS).forEach { row(it) }
-                SeeAllButton(
-                    modifier = Modifier.clearAndSetSemantics {
-                        contentDescription = "All $title"
-                    },
-                    onClick = onClickSeeAll,
-                )
+                SeeAllButton(onClick = onClickSeeAll)
             }
         }
     }
@@ -188,16 +206,12 @@ private fun <T> OverViewDivider(
  * The Accounts card within the Rally Overview screen.
  */
 @Composable
-private fun AccountsCard(onClickSeeAll: () -> Unit, onAccountClick: (String) -> Unit) {
+private fun AccountsCard(onScreenChange: (RallyScreen) -> Unit) {
     val amount = UserData.accounts.map { account -> account.balance }.sum()
-    OverviewScreenCard(title = stringResource(R.string.accounts),
-        amount = amount,
-        onClickSeeAll = onClickSeeAll,
-        data = UserData.accounts,
-        colors = { it.color },
-        values = { it.balance }) { account ->
+    OverviewScreenCard(title = stringResource(R.string.accounts), amount = amount, onClickSeeAll = {
+        onScreenChange(RallyScreen.Accounts)
+    }, data = UserData.accounts, colors = { it.color }, values = { it.balance }) { account ->
         AccountRow(
-            modifier = Modifier.clickable { onAccountClick(account.name) },
             name = account.name,
             number = account.number,
             amount = account.balance,
@@ -210,14 +224,11 @@ private fun AccountsCard(onClickSeeAll: () -> Unit, onAccountClick: (String) -> 
  * The Bills card within the Rally Overview screen.
  */
 @Composable
-private fun BillsCard(onClickSeeAll: () -> Unit) {
+private fun BillsCard(onScreenChange: (RallyScreen) -> Unit) {
     val amount = UserData.bills.map { bill -> bill.amount }.sum()
-    OverviewScreenCard(title = stringResource(R.string.bills),
-        amount = amount,
-        onClickSeeAll = onClickSeeAll,
-        data = UserData.bills,
-        colors = { it.color },
-        values = { it.amount }) { bill ->
+    OverviewScreenCard(title = stringResource(R.string.bills), amount = amount, onClickSeeAll = {
+        onScreenChange(RallyScreen.Bills)
+    }, data = UserData.bills, colors = { it.color }, values = { it.amount }) { bill ->
         BillRow(
             name = bill.name, due = bill.due, amount = bill.amount, color = bill.color
         )
@@ -225,9 +236,9 @@ private fun BillsCard(onClickSeeAll: () -> Unit) {
 }
 
 @Composable
-private fun SeeAllButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
+private fun SeeAllButton(onClick: () -> Unit) {
     TextButton(
-        onClick = onClick, modifier = modifier
+        onClick = onClick, modifier = Modifier
             .height(44.dp)
             .fillMaxWidth()
     ) {

@@ -16,12 +16,8 @@
 
 package com.LeeSeungYun1020.composeapplication.ui.accounts
 
-import androidx.compose.foundation.clickable
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import com.LeeSeungYun1020.composeapplication.R
 import com.LeeSeungYun1020.composeapplication.data.Account
 import com.LeeSeungYun1020.composeapplication.ui.components.AccountRow
@@ -31,11 +27,8 @@ import com.LeeSeungYun1020.composeapplication.ui.components.StatementBody
  * The Accounts screen.
  */
 @Composable
-fun AccountsBody(
-    accounts: List<Account>,
-    onAccountClick: (String) -> Unit = {},
-) {
-    StatementBody(modifier = Modifier.semantics { contentDescription = "Accounts Screen" },
+fun AccountsBody(accounts: List<Account>) {
+    StatementBody(
         items = accounts,
         amounts = { account -> account.balance },
         colors = { account -> account.color },
@@ -43,31 +36,8 @@ fun AccountsBody(
         circleLabel = stringResource(R.string.total),
         rows = { account ->
             AccountRow(
-                modifier = Modifier.clickable {
-                    onAccountClick(account.name)
-                },
-                name = account.name,
-                number = account.number,
-                amount = account.balance,
+                name = account.name, number = account.number, amount = account.balance,
                 color = account.color
             )
         })
-}
-
-/**
- * Detail screen for a single account.
- */
-@Composable
-fun SingleAccountBody(account: Account) {
-    StatementBody(
-        items = listOf(account),
-        colors = { account.color },
-        amounts = { account.balance },
-        amountsTotal = account.balance,
-        circleLabel = account.name,
-    ) { row ->
-        AccountRow(
-            name = row.name, number = row.number, amount = row.balance, color = row.color
-        )
-    }
 }
