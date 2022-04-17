@@ -41,7 +41,11 @@ import com.LeeSeungYun1020.composeapplication.ui.theme.JetnewsTheme
 @Composable
 fun PostCardHistory(post: Post, navigateToArticle: (String) -> Unit) {
     var openDialog by remember { mutableStateOf(false) }
-    Row(Modifier.clickable { navigateToArticle(post.id) }) {
+    Row(Modifier.clickable(
+        onClickLabel = stringResource(id = R.string.action_read_article)
+    ) {
+        navigateToArticle(post.id)
+    }) {
         Image(
             painter = painterResource(post.imageThumbId),
             contentDescription = null,
@@ -110,9 +114,12 @@ fun PostCardHistory(post: Post, navigateToArticle: (String) -> Unit) {
 fun PostCardPopular(
     post: Post, navigateToArticle: (String) -> Unit, modifier: Modifier = Modifier
 ) {
-    Card(shape = MaterialTheme.shapes.medium,
+    Card(
+        shape = MaterialTheme.shapes.medium,
         modifier = modifier.size(280.dp, 240.dp),
-        onClick = { navigateToArticle(post.id) }) {
+        onClick = { navigateToArticle(post.id) },
+        onClickLabel = stringResource(id = R.string.action_read_article)
+    ) {
         Column {
 
             Image(
