@@ -69,11 +69,14 @@ fun PostCardHistory(post: Post, navigateToArticle: (String) -> Unit) {
             }
         }
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-            Icon(imageVector = Icons.Default.Close,
-                contentDescription = stringResource(R.string.cd_show_fewer),
-                modifier = Modifier
-                    .clickable { openDialog = true }
-                    .size(24.dp))
+            // Icon button을 사용하면 자동으로 48dp 이상의 크기로 맞춤 설정
+            IconButton(onClick = { openDialog = true }) {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = stringResource(R.string.cd_show_fewer)
+                )
+            }
+
         }
     }
     if (openDialog) {
