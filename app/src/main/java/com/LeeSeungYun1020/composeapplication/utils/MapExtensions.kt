@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package com.example.jetnews.ui.theme
+package com.LeeSeungYun1020.composeapplication.utils
 
-import androidx.compose.ui.graphics.Color
-
-val Red200 = Color(0xfff297a2)
-val Red300 = Color(0xffea6d7e)
-val Red700 = Color(0xffdd0d3c)
-val Red800 = Color(0xffd00036)
-val Red900 = Color(0xffc20029)
+internal fun <E> MutableSet<E>.addOrRemove(element: E) {
+    if (!add(element)) {
+        remove(element)
+    }
+}

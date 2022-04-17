@@ -30,6 +30,7 @@ buildscript {
         uiAutomatorVersion = '2.2.0'
         viewPagerVersion = '1.0.0'
         workVersion = '2.5.0'
+        accompanist_version = '0.23.1'
     }
     repositories {
         google()

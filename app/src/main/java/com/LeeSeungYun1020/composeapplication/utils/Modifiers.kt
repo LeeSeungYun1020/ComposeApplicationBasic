@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-package com.example.jetnews.ui.theme
+package com.LeeSeungYun1020.composeapplication.utils
 
-import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 
-val Red200 = Color(0xfff297a2)
-val Red300 = Color(0xffea6d7e)
-val Red700 = Color(0xffdd0d3c)
-val Red800 = Color(0xffd00036)
-val Red900 = Color(0xffc20029)
+/**
+ * Support wide screen by making the content width max 840dp, centered horizontally.
+ */
+fun Modifier.supportWideScreen() = this
+    .fillMaxWidth()
+    .wrapContentWidth(align = Alignment.CenterHorizontally)
+    .widthIn(max = 840.dp)

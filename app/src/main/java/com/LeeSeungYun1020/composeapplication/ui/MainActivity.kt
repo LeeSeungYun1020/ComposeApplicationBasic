@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package com.LeeSeungYun1020.composeapplication
+package com.LeeSeungYun1020.composeapplication.ui
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
-import com.LeeSeungYun1020.composeapplication.ui.JetnewsApp
+import com.LeeSeungYun1020.composeapplication.JetnewsApplication
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)

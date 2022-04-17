@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-package com.example.jetnews.ui.theme
+package com.LeeSeungYun1020.composeapplication
 
-import androidx.compose.ui.graphics.Color
+import android.app.Application
+import com.LeeSeungYun1020.composeapplication.data.AppContainer
+import com.LeeSeungYun1020.composeapplication.data.AppContainerImpl
 
-val Red200 = Color(0xfff297a2)
-val Red300 = Color(0xffea6d7e)
-val Red700 = Color(0xffdd0d3c)
-val Red800 = Color(0xffd00036)
-val Red900 = Color(0xffc20029)
+class JetnewsApplication : Application() {
+
+    // AppContainer instance used by the rest of classes to obtain dependencies
+    lateinit var container: AppContainer
+
+    override fun onCreate() {
+        super.onCreate()
+        container = AppContainerImpl(this)
+    }
+}
