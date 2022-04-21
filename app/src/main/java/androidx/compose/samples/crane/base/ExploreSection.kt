@@ -24,11 +24,8 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.samples.crane.R
 import androidx.compose.samples.crane.data.ExploreModel
 import androidx.compose.samples.crane.home.OnExploreItemClicked
@@ -45,6 +42,8 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.navigationBarsHeight
+import com.google.accompanist.insets.navigationBarsPadding
+import kotlinx.coroutines.launch
 
 @Composable
 fun ExploreSection(
@@ -56,14 +55,36 @@ fun ExploreSection(
     Surface(modifier = modifier.fillMaxSize(), color = Color.White, shape = BottomSheetShape) {
         Column(modifier = Modifier.padding(start = 24.dp, top = 20.dp, end = 24.dp)) {
             Text(
-                text = title,
-                style = MaterialTheme.typography.caption.copy(color = crane_caption)
+                text = title, style = MaterialTheme.typography.caption.copy(color = crane_caption)
             )
             Spacer(Modifier.height(8.dp))
             // TODO Codelab: derivedStateOf step
             // TODO: Show "Scroll to top" button when the first item of the list is not visible
-            val listState = rememberLazyListState()
-            ExploreList(exploreList, onItemClicked, listState = listState)
+            Box(Modifier.weight(1f)) {
+                val listState = rememberLazyListState()
+                ExploreList(exploreList, onItemClicked, listState = listState)
+                val showButton by remember {
+                    derivedStateOf {
+                        listState.firstVisibleItemIndex > 0
+                    }
+                }
+                if (showButton) {
+                    val coroutineScope = rememberCoroutineScope()
+                    FloatingActionButton(backgroundColor = MaterialTheme.colors.primary,
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .navigationBarsPadding()
+                            .padding(bottom = 8.dp),
+                        onClick = {
+                            coroutineScope.launch {
+                                listState.scrollToItem(0)
+                            }
+                        }) {
+                        Text("Up!")
+                    }
+                }
+            }
+
         }
     }
 }
