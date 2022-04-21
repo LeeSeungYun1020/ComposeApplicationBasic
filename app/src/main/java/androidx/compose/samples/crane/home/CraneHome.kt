@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.insets.statusBarsPadding
+import kotlinx.coroutines.launch
 
 typealias OnExploreItemClicked = (ExploreModel) -> Unit
 
@@ -47,14 +48,16 @@ fun CraneHome(
             CraneDrawer()
         }
     ) {
-        CraneHomeContent(
-            modifier = modifier,
+        val scope = rememberCoroutineScope()
+        CraneHomeContent(modifier = modifier,
             onExploreItemClicked = onExploreItemClicked,
             openDrawer = {
                 // TODO Codelab: rememberCoroutineScope step - open the navigation drawer
-                // scaffoldState.drawerState.open()
-            }
-        )
+                // 그냥 코루틴 스코프 사용시 컴파일 에러 발생
+                scope.launch {
+                    scaffoldState.drawerState.open()
+                }
+            })
     }
 }
 
